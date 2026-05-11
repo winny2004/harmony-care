@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('quiz_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('quiz_type'); // 'family_social' atau 'self_efficacy'
+            $table->string('quiz_type'); // 'family_social'
             $table->integer('total_score');
             $table->integer('max_score');
             $table->string('category'); // 'tinggi', 'sedang', 'rendah'

@@ -54,12 +54,10 @@ class CheckQuizData extends Command
 
             foreach ($users as $user) {
                 $familyCount = $user->getQuizCountByType('family_social');
-                $selfCount = $user->getQuizCountByType('self_efficacy');
                 $totalCount = $user->getTotalQuizCount();
 
                 $this->line("  User {$user->id} ({$user->name}):");
                 $this->line("    - Family Social: {$familyCount}");
-                $this->line("    - Self Efficacy: {$selfCount}");
                 $this->line("    - Total: {$totalCount}");
                 $this->newLine();
             }

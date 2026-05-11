@@ -16,9 +16,7 @@ Sistem kuisioner kesehatan mental berbasis web yang terintegrasi dengan AI untuk
 ## Features
 
 - ✅ User Authentication (Login/Register)
-- ✅ Multiple Quiz Types:
-  - Family Social (MSPSS + DASS-21)
-  - Self Efficacy
+- ✅ Family Social Quiz (MSPSS + DASS-21)
 - ✅ AI-Powered Prediction (Normal/Depresi/Cemas/Stres)
 - ✅ Severity Level Analysis (Ringan/Sedang/Berat/Sangat Berat)
 - ✅ Quiz History
@@ -194,7 +192,7 @@ Flask will run on `http://127.0.0.1:5000`
 ### Questions Table
 ```sql
 - id
-- type (family_social, self_efficacy)
+- type (family_social)
 - scale_type (likert_5, likert_4, likert_7, dass21)
 - question_text
 - order
@@ -216,7 +214,7 @@ Flask will run on `http://127.0.0.1:5000`
 ```sql
 - id
 - user_id
-- quiz_type (family_social, self_efficacy)
+- quiz_type (family_social)
 - total_score
 - max_score
 - category (Normal, Depresi, Cemas, Stres, tinggi, sedang, rendah)
@@ -244,7 +242,7 @@ GET /home            - User dashboard (auth required)
 ### Quiz Routes
 ```php
 GET  /quiz                    - Quiz selection page
-GET  /quiz/start/{type}       - Start quiz (family_social, self_efficacy)
+GET  /quiz/start/{type}       - Start quiz (family_social)
 POST /quiz/submit/{type}      - Submit quiz answers
 GET  /quiz/result/{type}      - View quiz results
 GET  /quiz/history            - Quiz history
@@ -266,7 +264,6 @@ GET  /quiz/history            - Quiz history
 1. After login, you'll see quiz options
 2. Choose:
    - **Family Social**: MSPSS + DASS-21 (with AI prediction)
-   - **Self Efficacy**: Self-efficacy + Well-being ((with AI prediction))
 
 #### 3. Complete Quiz
 
@@ -294,12 +291,7 @@ GET  /quiz/history            - Quiz history
 - **Total DASS**: X/126
 - **Confidence Scores**: AI probability per category
 
-**For Self Efficacy Quiz**:
-Kuisioner ini menganalisis Self-Efficacy dan Psychological Well-Being mahasiswa menggunakan model Machine Learning.
-- **AI Prediction**: high well-being/low well-being
-- **Category**: high well-being (kondisi kesejahteraan psikologis baik)/ low well-being (kondisi kesejahteraan psikologis rendah)
-- **Percentage Score**: X% dari total
-- **Section Breakdown**: Self-efficacy (semua item) & Well-being scores (enam subskala)
+
 
 #### 5. Quiz History
 
@@ -654,7 +646,6 @@ Report issues:
 - Initial release
 - User authentication
 - Family Social quiz with AI prediction
-- Self Efficacy quiz
 - Quiz history
 - AI-powered mental health prediction
 - Severity level analysis
@@ -679,7 +670,7 @@ Report issues:
 ### Important Notes
 
 1. **DASS-21 Standard**: Skor dikalikan 2 (0-42 per kategori)
-2. **AI Priority**: Family Social uses AI, Self Efficacy uses percentage
+2. **AI Priority**: Family Social uses AI prediction
 3. **Flask Dependency**: Must run Flask API before using Family Social quiz
 4. **Database**: Run migrations after pulling updates
 5. **Assets**: Rebuild after modifying frontend

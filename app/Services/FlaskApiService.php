@@ -16,18 +16,14 @@ class FlaskApiService
 
     /**
      * Send quiz data to Flask API for prediction
-     * @param string $quizType - 'family_social' or 'self_efficacy'
+     * @param string $quizType - 'family_social'
      * @param array $quizData
      */
     public function predictMentalHealth(string $quizType, array $quizData)
     {
         try {
             // Determine which endpoint to use based on quiz type
-            $endpoint = $quizType === 'family_social' ? '/api/dass/predict' : '/api/se/predict';
-
-            // DEBUG: Log outgoing request
-            \Log::info("Flask API Request ({$quizType}):", $quizData);
-            \Log::info("Endpoint: {$this->baseUrl}{$endpoint}");
+            $endpoint = '/api/dass/predict' ;
 
             $response = Http::timeout(10)->post("{$this->baseUrl}{$endpoint}", $quizData);
 
@@ -138,48 +134,5 @@ class FlaskApiService
             5 => 'Sangat setuju',
             default => 'Netral',
         };
-    }
-
-    public function transformSelfEfficacyData($answers, $questions)
-    {
-        $data = [];
-
-        // =========================
-        // SELF EFFICACY (10 soal)
-        // =========================
-
-        $seQuestions = $questions
-            ->where('section', 'self_efficacy')
-            ->sortBy('order')
-            ->values();
-
-        foreach ($seQuestions as $index => $question) {
-
-            $score = intval($answers[$question->id] ?? 1);
-
-            $seNumber = $index + 1;
-
-            $data["SE" . str_pad($seNumber, 2, '0', STR_PAD_LEFT)] = $score;
-        }
-
-        // =========================
-        // WELL BEING (18 soal)
-        // =========================
-
-        $wbQuestions = $questions
-            ->where('section', 'well_being')
-            ->sortBy('order')
-            ->values();
-
-        foreach ($wbQuestions as $index => $question) {
-
-            $score = intval($answers[$question->id] ?? 1);
-
-            $qNumber = $index + 1;
-
-            $data["Q{$qNumber}"] = $score;
-        }
-
-        return $data;
     }
 }

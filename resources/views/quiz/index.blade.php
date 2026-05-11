@@ -12,7 +12,7 @@
         </div>
 
         <!-- Quiz Cards -->
-        <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="grid md:grid-cols-1 gap-8 mb-12 max-w-2xl mx-auto">
             <a href="{{ route('quiz.start', 'family_social') }}"
                 class="block bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition transform hover:scale-105 border-t-4 border-blue-500">
                 <div class="text-center">
@@ -31,29 +31,6 @@
                     </div>
                     <button
                         class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition">
-                        Mulai Kuisioner
-                    </button>
-                </div>
-            </a>
-
-            <a href="{{ route('quiz.start', 'self_efficacy') }}"
-                class="block bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition transform hover:scale-105 border-t-4 border-green-500">
-                <div class="text-center">
-                    <div class="text-green-500 text-6xl mb-4">💪</div>
-                    <h2 class="text-3xl font-bold text-blue-700 mb-3">Self Efficacy Factor</h2>
-                    <p class="text-gray-600 mb-6">
-                        Ukur tingkat kepercayaan diri dan keyakinan terhadap kemampuan diri sendiri
-                    </p>
-                    <div class="space-y-2 mb-6">
-                        <div class="flex items-center justify-center text-sm text-gray-600">
-                            <span class="mr-2">📝</span> 10 Pertanyaan Self-Efficacy dan 18 Pertanyaan Well-being
-                        </div>
-                        <div class="flex items-center justify-center text-sm text-gray-600">
-                            <span class="mr-2">⏱️</span> Estimasi 5-10 menit
-                        </div>
-                    </div>
-                    <button
-                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition">
                         Mulai Kuisioner
                     </button>
                 </div>

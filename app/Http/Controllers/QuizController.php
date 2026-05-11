@@ -18,7 +18,7 @@ class QuizController extends Controller
 
     public function start($type)
     {
-        if (!in_array($type, ['family_social', 'self_efficacy'])) {
+        if (!in_array($type, ['family_social'])) {
             abort(404);
         }
 
@@ -111,34 +111,6 @@ class QuizController extends Controller
             }
         }
 
-        if ($type === 'self_efficacy') {
-            try {
-                $flaskService = new FlaskApiService();
-                /* SELF EFFICACY ML */
-                $quizData = $flaskService->transformSelfEfficacyData(
-                    $request->answers,
-                    $questions
-                );
-                $predictionResult = $flaskService->predictMentalHealth($type, $quizData);
-
-                if ($predictionResult['success']) {
-                    $predictionData = $predictionResult['data'];
-                    $aiPrediction = $predictionData['prediction'] ?? null;
-
-                    if ($aiPrediction) {
-                        $category = $aiPrediction; 
-                    }
-
-                    $feedback = $predictionData['explanation'] ?? $feedback;
-
-                }
-
-            } catch (\Exception $e) {
-                \Log::error('Flask API Error Self-Efficacy: ' . $e->getMessage());
-            }
-
-        }
-
         // Save quiz result
         $result = QuizResult::create([
             'user_id' => Auth::id(),
@@ -185,55 +157,7 @@ class QuizController extends Controller
 
     private function renderResultView($result, $type)
     {
-        // Get section breakdown for self_efficacy quiz only
-        // For family_social, we use AI prediction data instead
-        $sectionBreakdown = null;
-        if ($type === 'self_efficacy') {
-            $questions = Question::byType($type)->active()->ordered()->get();
-            $userAnswers = Answer::where('user_id', Auth::id())
-                ->whereIn('question_id', $questions->pluck('id'))
-                ->get()
-                ->keyBy('question_id');
-
-            $selfEfficacyQuestions = $questions->where('scale_type', 'likert_4');
-            $wellBeingQuestions = $questions->where('scale_type', 'likert_7');
-
-            $selfEfficacyScore = 0;
-            $selfEfficacyMax = 0;
-            $wellBeingScore = 0;
-            $wellBeingMax = 0;
-
-            foreach ($selfEfficacyQuestions as $question) {
-                $selfEfficacyMax += $question->getMaxScore();
-                if (isset($userAnswers[$question->id])) {
-                    $selfEfficacyScore += $userAnswers[$question->id]->score;
-                }
-            }
-
-            foreach ($wellBeingQuestions as $question) {
-                $wellBeingMax += $question->getMaxScore();
-                if (isset($userAnswers[$question->id])) {
-                    $wellBeingScore += $userAnswers[$question->id]->score;
-                }
-            }
-
-            $sectionBreakdown = [
-                'self_efficacy' => [
-                    'score' => $selfEfficacyScore,
-                    'max' => $selfEfficacyMax,
-                    'percentage' => $selfEfficacyMax > 0 ? ($selfEfficacyScore / $selfEfficacyMax) * 100 : 0,
-                    'count' => $selfEfficacyQuestions->count(),
-                ],
-                'well_being' => [
-                    'score' => $wellBeingScore,
-                    'max' => $wellBeingMax,
-                    'percentage' => $wellBeingMax > 0 ? ($wellBeingScore / $wellBeingMax) * 100 : 0,
-                    'count' => $wellBeingQuestions->count(),
-                ],
-            ];
-        }
-
-        return view('quiz.result', compact('result', 'type', 'sectionBreakdown'));
+        return view('quiz.result', compact('result', 'type'));
     }
 
     public function history()
@@ -276,7 +200,6 @@ class QuizController extends Controller
     {
         return match($type) {
             'family_social' => 'Family Social Factor',
-            'self_efficacy' => 'Self Efficacy',
             default => 'Kuisioner',
         };
     }

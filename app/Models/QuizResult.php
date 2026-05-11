@@ -64,7 +64,6 @@ class QuizResult extends Model
     {
         return match($this->quiz_type) {
             'family_social' => '👨‍👩‍👧‍👦',
-            'self_efficacy' => '💪',
             default => '📝',
         };
     }
@@ -76,7 +75,6 @@ class QuizResult extends Model
     {
         return match($this->quiz_type) {
             'family_social' => 'Family Social Factor',
-            'self_efficacy' => 'Self Efficacy Factor',
             default => 'Unknown',
         };
     }

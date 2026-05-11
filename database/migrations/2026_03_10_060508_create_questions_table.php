@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // 'family_social' atau 'self_efficacy'
+            $table->string('type'); // 'family_social'
             $table->text('question_text');
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
